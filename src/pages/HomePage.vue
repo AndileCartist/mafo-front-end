@@ -60,7 +60,7 @@
 <script>
 import Table from "../components/Table.vue";
 import axios from "axios";
-const apiUrl = process.env.API_URL || "http://localhost:1337/";
+const apiUrl = process.env.API_URL || "https://mafo-backend.herokuapp.com/";
 
 export default {
   name: "home-page",

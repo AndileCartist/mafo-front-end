@@ -10,7 +10,7 @@
 
 <script>
 import axios from "axios";
-const apiUrl = process.env.API_URL || "http://localhost:1337/";
+const apiUrl = process.env.API_URL || "https://mafo-backend.herokuapp.com/";
 import PaymentChart from "../components/PaymentChart.vue";
 //import Table from "../components/Table.vue"
 export default {
