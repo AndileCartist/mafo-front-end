@@ -2,7 +2,7 @@
   <div class="btn-section">
     <div class="btn-con">
       <button class="button" @click="$emit('more')">
-        View More
+        Sign Out
         <div class="button__horizontal"></div>
         <div class="button__vertical"></div>
       </button>
@@ -17,26 +17,27 @@ export default {};
 <style lang="css" scoped>
 .btn-section {
   min-height: 80px;
-  margin-top: 20px;
+  margin-top: 80px;
 }
+
 .btn-con {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #f5f5f5;
+  background: #2d3748;
 }
 .button {
   --offset: 10px;
   --border-size: 2px;
   display: block;
   position: relative;
-  padding: 1.5em 3em;
+  padding: 1em 2em;
   appearance: none;
   border: 0;
-  background: #57adf7;
-  color: #3e3c3c;
+  background: #2d3748;
+  color: #8f8f8f;
   text-transform: uppercase;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.20em;
   outline: none;
   cursor: pointer;
   font-weight: bold;
@@ -46,6 +47,7 @@ export default {};
 }
 .button:hover {
   background: rgba(100, 0, 0, 0.03);
+  color: #ffffff;
 }
 .button__horizontal,
 .button__vertical {

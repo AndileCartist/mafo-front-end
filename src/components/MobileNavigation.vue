@@ -1,6 +1,6 @@
 <template>
   <div class="nav-main-cont">
-    <div class="cont" :class="{ scrollNav: scrollPosition > 299 }">
+    <div class="cont">
       <img
         src="../assets/menu-lines-list_2931181.svg"
         alt="open navigation"
@@ -8,24 +8,13 @@
         @click="toggleNav()"
       />
       <router-link to="/">
-        <img
-          :class="{ display: scrollPosition > 299 }"
-          class="logo"
-          src="../assets/mylogo.jpg"
-          alt=""
-        />
-        <img
-          :class="{ opacity: scrollPosition > 299 }"
-          class="logo-2"
-          src="../assets/mylogo-removebg-preview.jpg"
-          alt=""
-        />
+        <img class="logo" src="../assets/mafo-logo-2.jpg" alt="" />
       </router-link>
       <div class="nav nav-black" :class="{ visible: openNav }">
         <div class="nav nav-red" :class="{ visible: openNav }">
           <div class="nav nav-white" :class="{ visible: openNav }">
             <img
-              src="../assets/iconfinder_exit-delete-remove-close-x_2931151.svg"
+              src="../assets/close-5758.svg"
               alt="close navigavtion"
               class="nav-btn close-btn"
               style=" width: 11%;"
@@ -41,100 +30,31 @@
             class="logo"
           />
 -->
-            <ul class="list">
-              <li @click="toggleHeader(1)">
-                <a href="#"
-                  ><img
-                    src="../assets/iconfinder_down-bottom-arrow_2931160.svg"
-                    alt=""
-                    class="drop-icon"
-                  />
-                  for-you</a
-                >
-              </li>
-              <li
-                :class="{
-                  closeNavigation: !openHeader,
-                  openNavigation: openHeader,
-                }"
-              >
-                <ul>
-                  <li @click="toggleNav()">
-                    <router-link to="signin">sign-in</router-link>
-                  </li>
-                  <li @click="toggleNav()">
-                    <router-link to="signup">sign-up</router-link>
-                  </li>
-                </ul>
-              </li>
-              <li @click="toggleHeader(2)">
-                <a href="#"
-                  ><img
-                    src="../assets/iconfinder_down-bottom-arrow_2931160.svg"
-                    alt=""
-                    class="drop-icon"
-                  />categories</a
-                >
-              </li>
-              <li
-                :class="{
-                  closeNavigation: !openHeader2,
-                  openNavigation: openHeader2,
-                }"
-              >
-                <ul>
-                  <li @click="toggleNav()">
-                    <router-link to="general">general</router-link>
-                  </li>
-                  <li @click="toggleNav()">
-                    <router-link to="business">business</router-link>
-                  </li>
-                  <li @click="toggleNav()">
-                    <router-link to="entertainment">entertainment</router-link>
-                  </li>
-                  <li @click="toggleNav()">
-                    <router-link to="health">health</router-link>
-                  </li>
-                  <li @click="toggleNav()">
-                    <router-link to="science">science</router-link>
-                  </li>
-                  <li @click="toggleNav()">
-                    <router-link to="sport">sport</router-link>
-                  </li>
-                  <li @click="toggleNav()">
-                    <router-link to="technology">technology</router-link>
-                  </li>
-                </ul>
-              </li>
-              <li @click="toggleHeader(3)">
-                <a href="#"
-                  ><img
-                    src="../assets/iconfinder_down-bottom-arrow_2931160.svg"
-                    alt=""
-                    class="drop-icon"
-                  />accounts</a
-                >
-              </li>
-              <li
-                :class="{
-                  closeNavigation: !openHeader3,
-                  openNavigation: openHeader3,
-                }"
-              >
-                <ul>
-                  <li @click="toggleNav()">
-                    <router-link to="signin">sign-in</router-link>
-                  </li>
-                  <li @click="toggleNav()">
-                    <router-link to="signup">sign-up</router-link>
-                  </li>
-                </ul>
-              </li>
-               <li @click="toggleNav()">
-                    <router-link to="/">about</router-link>
-                  </li>
-                  
-            </ul>
+            <div class="side-nav">
+              <div class="side-nav-list">
+                <div class="nav-list-item" @click="toggleNav()">
+                  <img src="../assets/dashboard-5481.svg" alt="" />
+                  <router-link to="/">DashBoard</router-link>
+                </div>
+                <div class="nav-list-item" @click="toggleNav()">
+                  <img src="../assets/users-267.svg" alt="" />
+                  <router-link to="">All Users</router-link>
+                </div>
+                <div class="nav-list-item" @click="toggleNav()">
+                  <img src="../assets/credit-card-2015.svg" alt="" />
+                  <router-link to="payment-history"
+                    >Payment History</router-link
+                  >
+                </div>
+                <div class="nav-list-item" @click="toggleNav()">
+                  <img src="../assets/add-user.svg" alt="" />
+                  <router-link to="/adduser">Add User</router-link>
+                </div>
+                <div class="">
+                  <link-btn></link-btn>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -155,17 +75,10 @@ export default {
       scrollPosition: null,
     };
   },
-  mounted() {
-    window.addEventListener("scroll", this.updateScroll);
-  },
-  destroy() {
-    window.removeEventListener("scroll", this.updateScroll);
-  },
+  mounted() {},
+  destroy() {},
   computed: {},
   methods: {
-    updateScroll() {
-      return (this.scrollPosition = window.top.scrollY);
-    },
     toggleNav() {
       return this.openNav ? (this.openNav = false) : (this.openNav = true);
     },
@@ -191,7 +104,7 @@ export default {
 <style lang="css" scoped>
 .cont {
   height: 60px;
-  background: #7433c1;
+  background: #1c4b69;
   position: fixed;
   border-bottom: 2.5px solid rgb(34, 31, 31);
   width: 100%;
@@ -205,29 +118,16 @@ export default {
 .nav-btn-width {
   width: 11%;
 }
-.scrollNav {
-  background-color: rgba(239, 239, 239, 0.98);
-  color: rgb(46, 45, 45) !important;
-  transition: background-color 0.3s linear;
-}
+
 .logo,
 .logo-2 {
   width: 200px;
   position: absolute;
   transition: opacity 0.3s linear;
   left: 25%;
+  height: 60px;
 }
-.opacity {
-  transition: opacity 0.3s linear;
-  opacity: 0;
-}
-.logo {
-  opacity: 0;
-}
-.display {
-  transition: opacity 0.3s linear;
-  opacity: 1;
-}
+
 @media only screen and (min-width: 473px) {
   .cont {
     height: 80px;
@@ -239,7 +139,7 @@ export default {
     width: 9%;
   }
 }
-@media only screen and (min-width: 769px) {
+@media only screen and (min-width: 768px) {
   .nav-main-cont {
     display: none;
   }
@@ -292,7 +192,7 @@ export default {
 }
 
 .nav-red {
-  background-color: #c13339;
+  background-color: rgb(158 155 57);
   width: 95%;
   transition-delay: 0.2s;
 }
@@ -302,11 +202,12 @@ export default {
 }
 
 .nav-white {
-  background-color: #efefef;
-  width: 85%;
+  background-color: #1c4b69;
+  width: 90%;
   padding: 20px;
   position: relative;
   transition-delay: 0s;
+  padding-left: 0;
 }
 
 .nav-white.visible {
@@ -316,8 +217,8 @@ export default {
 .close-btn {
   opacity: 0.3;
   position: absolute;
-  top: 40px;
-  right: 30px;
+  top: 20px;
+  right: 10px;
 }
 
 .list {
@@ -353,5 +254,38 @@ export default {
   max-height: 286px;
   transition: max-height 0.8s, overflow 0.8s 0.8s;
   transition-timing-function: ease-out;
+}
+
+.side-nav-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+  gap: 15px;
+}
+.nav-list-item {
+  margin-top: 13px;
+  padding: 3px;
+  color: #8f8f8f;
+}
+.side-nav-list > .nav-list-item:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+  font-weight: 800;
+  cursor: pointer;
+}
+.nav-list-item > img {
+  width: 7%;
+  margin: 0 15px;
+  height: 24px;
+}
+.nav-list-item > a {
+  font-size: 20px;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 100;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+.nav-list-item > a:hover {
+  color: rgb(255, 255, 255);
 }
 </style>

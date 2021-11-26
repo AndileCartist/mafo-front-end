@@ -10,39 +10,24 @@ const routes = [
     component: () => import("../pages/HomePage")
   },
   {
-    path: "/sports",
-    name: "sports",
-    component: () => import("../components/FeedContainer")
+    path: "/adduser",
+    name: "adduser",
+    component: () => import("../pages/AddUser")
   },
   {
-    path: "/science",
-    name: "science",
-    component: () => import("../components/FeedContainer")
+    path: "/payment-history",
+    name: "payment-history",
+    component: () => import("../pages/PaymentHistory")
   },
   {
-    path: "/health",
-    name: "health",
-    component: () => import("../components/FeedContainer")
+    path: "/next-payments",
+    name: "next-payments",
+    component: () => import("../pages/NextPayments")
   },
   {
-    path: "/business",
-    name: "business",
-    component: () => import("../components/FeedContainer")
-  },
-  {
-    path: "/technology",
-    name: "technology",
-    component: () => import("../components/FeedContainer")
-  },
-  {
-    path: "/entertainment",
-    name: "entertainment",
-    component: () => import("../components/FeedContainer")
-  },
-  {
-    path: "/general",
-    name: "general",
-    component: () => import("../components/FeedContainer")
+    path: "/all-students",
+    name: "all-students",
+    component: () => import("../pages/AllStudents")
   },
   {
     path: "/signin",

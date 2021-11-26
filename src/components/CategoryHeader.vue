@@ -19,9 +19,8 @@ export default {
 .cont {
   display: flex;
   align-items: center;
-  margin: 10px;
   flex-direction: column;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 .category-font {
   font-family: "Playfair Display", serif;
@@ -59,7 +58,7 @@ export default {
 }
 @media only screen and (min-width: 800px) {
   .header-size {
-    font-size: 38px;
+    font-size: 25px;
   }
 }
 </style>

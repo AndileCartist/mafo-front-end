@@ -1,107 +1,94 @@
 <template>
-  <div>
-    <baner></baner>
-    <div class="body">
-      <div>
-        <category-header header="Trending News"></category-header>
-        <card :news="gethomeFeed"></card>
-        <link-btn
-          v-on:more="
-            incrementTopics();
-            fetchData();
-          "
-        ></link-btn>
+  <transition name="slide-fade">
+    <div v-if="show" class="home-page">
+      <h1>
+        DashBoard
+      </h1>
+      <div class="panel-tab">
+        <div class="panel-container">
+          <img src="../assets/network-team-308.svg" alt="" />
+          <div>
+            <router-link to="all-students">All Users</router-link>
+            <p>1 452</p>
+          </div>
+        </div>
+        <div class="panel-container">
+          <img src="../assets/user-login-5867.svg" alt="" />
+          <div>
+            <router-link @click="show = !show" to="/adduser"
+              >Add User</router-link
+            >
+          </div>
+        </div>
+        <div class="panel-container">
+          <img src="../assets/credit-card-2015.svg" alt="" />
+          <div>
+            <router-link to="next-payments">Next Payments</router-link>
+          </div>
+        </div>
       </div>
-      <div>
-        <news-latter></news-latter>
+      <div class="content">
+        <Table :students="students" />
+        <!--  <div class="table">
+          <div class="table-head">
+            <p>NAME</p>
+            <p>SURNAME</p>
+            <p>CONTACT</p>
+          </div>
+          <div class="student-info">
+            <p>Andile</p>
+            <p>Mkhize</p>
+            <p>071-904-8241</p>
+            <div class="button-container">
+              <button class="button-50 view-btn" role="button">
+                view Profle
+              </button>
+            </div>
+            <div class="button-container">
+              <button class="button-50 edit-btn" role="button">Edit</button>
+            </div>
+          </div>
+          <div class="student-info"></div>
+          <div class="student-info"></div>
+          <div class="student-info"></div>
+        </div>  -->
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
-import Baner from "../components/Baner.vue";
-import CategoryHeader from "../components/CategoryHeader.vue";
-import Card from "../components/Card.vue";
-import NewsLatter from "../components/NewsLatter.vue";
+import Table from "../components/Table.vue";
 import axios from "axios";
-import LinkBtn from "../components/LinkBtn.vue";
-const apiUrl = process.env.API_URL || "https://mzansi-curator.herokuapp.com/";
-import { mapGetters, mapMutations } from "vuex";
+const apiUrl = process.env.API_URL || "http://localhost:1337/";
+
 export default {
   name: "home-page",
   components: {
-    Baner,
-    CategoryHeader,
-    Card,
-    LinkBtn,
-    NewsLatter,
+    Table,
   },
   data() {
     return {
-      news: [],
+      students: [],
+      show: true,
     };
   },
-  computed: {
-    ...mapGetters(["getTopics", "gethomeFeed"]),
-    homepageNews() {
-      let stories = [];
-      this.news.forEach((feed) => {
-        feed.value.data.map((value) => {
-          return stories.push(value);
-        });
-      });
-      return this.shuffleArray(stories);
-    },
-  },
+  computed: {}, 
   created() {
-    this.fetchData();
+    this.getData()
   },
-  methods: {
-    ...mapMutations(["incrementTopics"]),
-    work() {
-      return alert("working");
-    },
-    // ...mapMutations(["addHomeFeed"]),
-    shuffleArray(array) {
-      var currentIndex = array.length,
-        randomIndex;
-      // While there remain elements to shuffle...
-      while (0 !== currentIndex) {
-        // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-        // And swap it with the current element.
-        [array[currentIndex], array[randomIndex]] = [
-          array[randomIndex],
-          array[currentIndex],
-        ];
-      }
-      return array;
-    },
-    async fetchData() {
+  methods: { 
+    async getData() {
       try {
-        let urls = this.getTopics.map((url) => {
-          return axios.get(
-            `${apiUrl}${url.category}?_sort=publishedAt:DESC&_start=${url.ofset}&_limit=${url.total}`
-          );
-        });
-
-        Promise.allSettled(urls).then((results) => {
-          this.news = results;
-          let stories = [];
-          results.forEach((feed) => {
-            feed.value.data.map((value) => {
-              return stories.push(value);
-            });
-          });
-          this.shuffleArray(stories).forEach((result) => {
-            return this.$store.commit("addHomeFeed", result);
-          });
-        });
+        let { data } = await axios.get(
+          `${apiUrl}student-data?_sort=publishedAt:DESC&_limit=${13}`
+        );
+        this.students = data
+        console.log(data); 
       } catch (err) {
         alert(err.message || "An error occurred.");
         console.log(err);
+        console.log(this.$route.name);
       }
     },
   },
@@ -109,44 +96,98 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.body {
-  min-height: 850px;
+.home-page {
+  /* margin-top: 75px;
+  margin-left: 27%;*/
+  background-image: url("../assets/diamond-sunset.svg");
+}
+.home-page > h1 {
+  padding: 35px 25px;
+  font-family: inherit;
+  color: #1d4a69;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.panel-tab {
+  width: 100%;
+  min-height: 100px;
   display: flex;
   flex-direction: column;
-  border-top: 2.5px solid rgb(34, 31, 31);
+  align-items: center;
+  gap: 10px 15px;
 }
-.body > :nth-child(1) {
-  background: whitesmoke;
+.panel-container {
+  border-radius: 5px;
+  height: 100px;
+  background: rgb(255, 255, 255);
+  width: 75%;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  margin: 0 25px;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-auto-columns: 1fr;
+  gap: 10px 15px;
+  grid-auto-flow: row;
+  align-items: center;
+  padding: 0 8px;
+  justify-items: center;
+  cursor: pointer;
+}
+.panel-container > img {
+  width: 50px;
+}
+.panel-container > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  font-family: emoji;
+  font-size: 22px;
+  padding-top: 10px;
+}
+.panel-container > div > a {
+  text-decoration: none;
+  color: #5e5e5e;
+}
+.panel-container > div > p {
+  margin-top: 0px;
+  font-size: 17px;
+  color: #5e5e5e;
+}
+.content {
   width: 100%;
   min-height: 650px;
-}
-.body > :nth-child(2) {
-  background: rgb(245 245 245);
-  width: 100%;
-  min-height: 200px;
+  background-color: inherit;
+  display: flex;
+  justify-content: center;
 }
 
-@media only screen and (min-width: 900px) {
-  .body {
-    flex-direction: row;
+@media only screen and (min-width: 768px) {
+
+  .home-page {
+    margin-top: 75px;
+    margin-left: 27%;
   }
-  .body > :nth-child(1) {
-    width: 65%;
-    min-height: 100%;
+  .panel-tab {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
   }
-  .body > :nth-child(2) {
-    width: 35%;
-    min-height: 100%;
-    padding-top: 200px;
-    padding-right: 10px;
+ 
+}
+
+
+@media only screen and (min-width: 1040px) {
+  .home-page {
+    margin-left: 24%;
   }
 }
-@media only screen and (min-width: 1077px) {
-  .body > :nth-child(1) {
-    width: 76%;
-  }
-  .body > :nth-child(2) {
-    width: 24%;
+
+@media only screen and (min-width: 1250px) {
+  .home-page {
+    margin-left: 17%;
   }
 }
 </style>
