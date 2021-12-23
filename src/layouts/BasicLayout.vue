@@ -5,7 +5,7 @@
     </div>
 
     <div class="body">
-      <div class="side-nav">
+      <div class="side-nav" :class="{ hide: nav }">
         <img src="../assets/logo.jpg" alt="" />
         <div class="side-nav-list">
           <div class="nav-list-item">
@@ -32,7 +32,7 @@
       </div>
 
       <div>
-        <div class="top-bar">
+        <div class="top-bar" :class="{ hide: hide }">
           <form action="#" method="post">
             <input
               type="text"
@@ -64,10 +64,15 @@ export default {
   data() {
     return {
       news: "",
+      hide: false,
+      currentRoute: this.$route.name,
     };
   },
   created() {
     this.KeepUserLogged();
+  },
+   watch: {
+    $route: "routeUpdate",
   },
   methods: {
     ...mapMutations(["setUser"]),
@@ -80,9 +85,20 @@ export default {
         console.log(localStorage.getItem("user"));
       }
     },
+    hideNavigation() {
+      return this.currentRoute === "signin"
+        ? (this.hide = true)
+        : (this.hide = false);
+    },
+    routeUpdate() {
+      this.currentRoute = this.$route.name;
+    },
   },
   computed: {
     ...mapGetters(["userData"]),
+    nav() {
+      return this.hideNavigation()
+    }
   },
 };
 </script>
@@ -224,5 +240,8 @@ input:focus {
   .side-nav > img {
     height: 180px;
   }
+}
+.hide {
+  display: none;
 }
 </style>

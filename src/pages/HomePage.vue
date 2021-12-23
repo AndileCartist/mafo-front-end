@@ -81,7 +81,7 @@ export default {
     async getData() {
       try {
         let { data } = await axios.get(
-          `${apiUrl}student-data?_sort=publishedAt:DESC&_limit=${13}`
+          `${apiUrl}users?_sort=publishedAt:DESC&_limit=${13}`
         );
         this.students = data
         console.log(data); 

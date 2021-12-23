@@ -7,7 +7,7 @@
         <p>CONTACT</p>
       </div>
       <div v-for="student in students" :key="student.id" class="student-info">
-        <p>{{ student.name }}</p>
+        <p>{{ student.username }}</p>
         <p>{{ student.surname }}</p>
         <p>{{ student.contact }}</p>
         <div class="button-container">

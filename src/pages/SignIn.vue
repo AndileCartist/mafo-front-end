@@ -5,13 +5,9 @@
         <div class="window">
           <div class="overlay"></div>
           <div class="content">
-            <div class="welcome">Hello There!</div>
-            <div v-if="currentRoute === 'signup'" class="subtitle">
-              We're almost done. Before using our services you need to create an
-              account.
-            </div>
-            <div v-else class="subtitle">
-              We're almost done. Sign-in into your account account.
+            <div class="welcome">Sign In!</div>
+            <div  class="subtitle">
+             Sign in at Mafo Academy
             </div>
             <div class="input-fields">
               <input
@@ -55,24 +51,15 @@
                 </span>
               </div>
             </div> -->
-              <button @click="handleSubmit()" class="ghost-round full-width">
+              <button
+                @click="handleSubmit()"
+                style="width: 60%; margin: auto;margin-top: 20px;"
+                class="ghost-round full-width"
+              >
                 {{ btnText }}
               </button>
-              <div class="spacing">
-                or
-              </div>
-              <div class="g-sign-in-button">
-                <div class="content-wrapper">
-                  <div class="logo-wrapper">
-                    <img
-                      src="https://developers.google.com/identity/images/g-logo.png"
-                    />
-                  </div>
-                  <span class="text-container">
-                    <span>Sign in with Google</span>
-                  </span>
-                </div>
-              </div>
+              
+
               <button
                 class="forgot-password"
                 v-if="currentRoute === 'signin'"
@@ -80,6 +67,13 @@
               >
                 forgot password
               </button>
+
+              <div class="spacing">
+                <p>|</p>
+                <p>OR</p>
+                <p>|</p>
+              </div>
+              <router-link class="adduser-link" to="adduser">Sign-Up</router-link>
             </div>
           </div>
         </div>
@@ -100,7 +94,14 @@
         :style="modalOpen ? { display: 'block' } : { display: 'none' }"
         class="modal"
       >
-        <span @click="closeModal(); navToHome()" class="close">&times;</span>
+        <span
+          @click="
+            closeModal();
+            navToHome();
+          "
+          class="close"
+          >&times;</span
+        >
         <div>
           <h1>SUCCESS!!</h1>
           <p>
@@ -138,7 +139,7 @@ export default {
   computed: {
     btnText() {
       if (this.currentRoute === "signin") {
-        return "Sign In";
+        return "Sign-In";
       } else {
         return "Create Account";
       }
@@ -152,7 +153,7 @@ export default {
       this.currentRoute = this.$route.name;
     },
     navToHome() {
-      this.$router.push('/')
+      this.$router.push("/");
     },
     closeModal() {
       this.modalOpen = false;
@@ -168,14 +169,14 @@ export default {
       try {
         this.loading = true;
         //     const response = await strapi.login(this.email, this.password)
-         await axios.post(`${apiUrl}/auth/local/register`, {
+        await axios.post(`${apiUrl}/auth/local/register`, {
           email: this.email,
           password: this.password,
           username: this.username,
         });
         this.loading = false;
         this.modalOpen = true;
-      //  console.log(res.data);
+        //  console.log(res.data);
       } catch (err) {
         this.loading = false;
         alert(err.message || "An error occurred.");
@@ -194,7 +195,7 @@ export default {
 
         this.$store.commit("setUser", data);
         //   this.setUser(data.user)
-        this.$router.push('/');
+        this.$router.push("/");
       } catch (err) {
         this.loading = false;
         alert(err.message || "An error occurred.");
@@ -234,7 +235,7 @@ input {
   background: inherit;
   border: none;
   cursor: pointer;
-  color: whitesmoke;
+  color: #818181;
 }
 .btn-field {
   display: flex;
@@ -247,15 +248,15 @@ button:focus {
 }
 
 ::-webkit-input-placeholder {
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(177 177 177, 0.65);
 }
 
 ::-webkit-input-placeholder .input-line:focus + ::input-placeholder {
-  color: #fff;
+  color: rgb(177 177 177);
 }
 
 .highlight {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(201, 201, 201, 0.8);
   font-weight: 400;
   cursor: pointer;
   transition: color 0.2s ease;
@@ -274,22 +275,28 @@ button:focus {
   font-weight: 300;
   text-align: center;
   margin-top: 10px;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgb(129 129 129);
+  font-size: 16px;
+}
+.spacing > P {
+  margin-bottom: 5px;
+  margin-top: 5px;
+  font-size: 20px;
 }
 
 .input-line:focus {
   outline: none;
-  border-color: #fff;
+  border-color: rgb(177 177 177);
   -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
 }
 
 .ghost-round {
   cursor: pointer;
-  background: none;
-  border: 1px solid rgba(255, 255, 255, 0.65);
+  background: #cbd5e0;
+  border: 1px solid rgba(58, 50, 50, 0.65);
   border-radius: 25px;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(56, 56, 56, 0.65);
   -webkit-align-self: flex-end;
   -ms-flex-item-align: end;
   align-self: flex-end;
@@ -304,8 +311,8 @@ button:focus {
 }
 
 .ghost-round:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
+  background: #9db4cc;
+  color: rgba(56, 56, 56, 0.65);
   -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
 }
@@ -321,7 +328,7 @@ button:focus {
   letter-spacing: 0.02rem;
   font-size: 19px;
   font-size: 1.2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.65);
+  border-bottom: 1px solid rgb(177 177 177);
   -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
 }
@@ -347,8 +354,9 @@ button:focus {
   -webkit-justify-content: center;
   -ms-flex-pack: center;
   justify-content: center;
-  background: #867ce0;
-  height: 700px;
+  background: #cbd5e0;
+  height: 850px;
+  z-index: 100;
 }
 
 .content {
@@ -362,6 +370,12 @@ button:focus {
   -ms-flex-flow: column;
   flex-flow: column;
   z-index: 10;
+  color: #818181;
+}
+.adduser-link {
+  text-decoration: none;
+  font-size: 27px;
+  color:#378fce;
 }
 
 .welcome {
@@ -401,73 +415,16 @@ button:focus {
 }
 
 .overlay {
-  background: -webkit-linear-gradient(#8ca6db, #b993d6);
-  background: linear-gradient(#8ca6db, #b993d6);
   filter: alpha(opacity=85);
   height: 500px;
   position: absolute;
   width: 360px;
+  background: #ffffff;
 }
 *,
 *:before,
 *:after {
   box-sizing: border-box;
-}
-
-.g-sign-in-button {
-  margin: 10px;
-  display: inline-block;
-  width: 240px;
-  height: 50px;
-  background-color: #4285f4;
-  color: #fff;
-  border-radius: 1px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
-  transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
-}
-
-.g-sign-in-button:hover {
-  cursor: pointer;
-  -webkit-box-shadow: 0 0 3px 3px rgba(66, 133, 244, 0.3);
-  box-shadow: 0 0 3px 3px rgba(66, 133, 244, 0.3);
-}
-
-.g-sign-in-button:active {
-  background-color: #3367d6;
-  transition: background-color 0.2s;
-}
-
-.g-sign-in-button .content-wrapper {
-  height: 100%;
-  width: 100%;
-  border: 1px solid transparent;
-}
-
-.g-sign-in-button img {
-  width: 18px;
-  height: 18px;
-}
-
-.g-sign-in-button .logo-wrapper {
-  padding: 15px;
-  background: #fff;
-  width: 48px;
-  height: 100%;
-  border-radius: 1px;
-  display: inline-block;
-}
-
-.g-sign-in-button .text-container {
-  font-family: Roboto, arial, sans-serif;
-  font-weight: 500;
-  letter-spacing: 0.21px;
-  font-size: 16px;
-  line-height: 48px;
-  vertical-align: top;
-  border: none;
-  display: inline-block;
-  text-align: center;
-  width: 180px;
 }
 
 @media (max-width: 500px) {
@@ -577,7 +534,7 @@ button:focus {
   animation-delay: 11s;
 }
 .background {
-  height: 700px;
+  height: 850px;
 }
 .modal {
   display: none;
