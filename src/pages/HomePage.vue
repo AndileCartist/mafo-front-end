@@ -9,7 +9,7 @@
           <img src="../assets/network-team-308.svg" alt="" />
           <div>
             <router-link to="all-students">All Users</router-link>
-            <p>1 452</p>
+            <p>{{students.length}}</p>
           </div>
         </div>
         <div class="panel-container">
@@ -60,7 +60,7 @@
 <script>
 import Table from "../components/Table.vue";
 import axios from "axios";
-const apiUrl = process.env.API_URL || "https://mafo-backend.herokuapp.com/";
+const apiUrl = process.env.API_URL || "http://localhost:3000";
 
 export default {
   name: "home-page",
@@ -80,11 +80,11 @@ export default {
   methods: { 
     async getData() {
       try {
-        let { data } = await axios.get(
-          `${apiUrl}users?_sort=publishedAt:DESC&_limit=${13}`
+        let {data} = await axios.get(
+          `${apiUrl}/api/users`
         );
-        this.students = data
-        console.log(data); 
+        this.students = data.docs
+        console.log(); 
       } catch (err) {
         alert(err.message || "An error occurred.");
         console.log(err);

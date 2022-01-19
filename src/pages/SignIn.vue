@@ -5,18 +5,9 @@
         <div class="window">
           <div class="overlay"></div>
           <div class="content">
-            <div class="welcome">Sign In!</div>
-            <div  class="subtitle">
-             Sign in at Mafo Academy
-            </div>
+            <category-header header="Sign in"></category-header>
+            <div style="height: 25px;" class="subtitle">{{ error }}</div>
             <div class="input-fields">
-              <input
-                v-if="currentRoute === 'signup'"
-                type="text"
-                placeholder="Username"
-                class="input-line full-width"
-                v-model="username"
-              />
               <input
                 type="email"
                 placeholder="Email"
@@ -29,51 +20,40 @@
                 class="input-line full-width"
                 v-model="password"
               />
-              <input
-                v-if="currentRoute === 'signup'"
-                type="password"
-                placeholder=" confirm Password"
-                class="input-line full-width"
-                v-model="confirmPassword"
-              />
             </div>
 
             <div class="btn-field">
-              <!--  <div class="g-sign-in-button">
-              <div class="content-wrapper">
-                <div class="logo-wrapper">
-                  <img
-                    src="https://developers.google.com/identity/images/g-logo.png"
-                  />
-                </div>
-                <span class="text-container">
-                  <span>Sign in with Google</span>
-                </span>
+              <div class="ctn">
+                <button
+                  class="btn-label"
+                  @click="
+                    validatePassword(password),
+                      validateEmail(email),
+                      handleSignin()
+                  "
+                >
+                  <span :class="{ open: loading, load: loading }"
+                    ><span
+                      :style="
+                        loading ? { display: 'none' } : { display: 'block' }
+                      "
+                      class="btn-text"
+                      >Log-in</span
+                    ></span
+                  >
+                </button>
               </div>
-            </div> -->
-              <button
-                @click="handleSubmit()"
-                style="width: 60%; margin: auto;margin-top: 20px;"
-                class="ghost-round full-width"
+              <router-link class="forgot-password" to="/forgot-password"
+                >forgot password</router-link
               >
-                {{ btnText }}
-              </button>
-              
-
-              <button
-                class="forgot-password"
-                v-if="currentRoute === 'signin'"
-                @click="forgotPassword()"
-              >
-                forgot password
-              </button>
-
               <div class="spacing">
                 <p>|</p>
                 <p>OR</p>
                 <p>|</p>
               </div>
-              <router-link class="adduser-link" to="adduser">Sign-Up</router-link>
+              <router-link class="adduser-link" to="adduser"
+                >Sign-Up</router-link
+              >
             </div>
           </div>
         </div>
@@ -118,12 +98,13 @@
 </template>
 
 <script>
-import axios from "axios";
-const apiUrl = process.env.API_URL || "https://mzansi-curator.herokuapp.com/";
-
+import CategoryHeader from '../components/CategoryHeader.vue';
+//import axios from "axios";
+const apiUrl = /*process.env.API_URL || */ "http://localhost:3000";
 //import { mapMutations } from 'vuex'
 export default {
   name: "sign-in",
+  components: {CategoryHeader},
   data() {
     return {
       username: "",
@@ -134,6 +115,8 @@ export default {
       user: null,
       currentRoute: this.$route.name,
       modalOpen: false,
+      error: "",
+      readyToSubmit: false,
     };
   },
   computed: {
@@ -158,69 +141,58 @@ export default {
     closeModal() {
       this.modalOpen = false;
     },
-    handleSubmit() {
-      if (this.currentRoute === "signup") {
-        this.handleSignup();
-      } else {
-        this.handleSignin();
-      }
-    },
-    async handleSignup() {
-      try {
-        this.loading = true;
-        //     const response = await strapi.login(this.email, this.password)
-        await axios.post(`${apiUrl}/auth/local/register`, {
-          email: this.email,
-          password: this.password,
-          username: this.username,
-        });
-        this.loading = false;
-        this.modalOpen = true;
-        //  console.log(res.data);
-      } catch (err) {
-        this.loading = false;
-        alert(err.message || "An error occurred.");
-      }
-    },
     async handleSignin() {
       try {
-        this.loading = true;
-        //     const response = await strapi.login(this.email, this.password)
-        const { data } = await axios.post(`${apiUrl}/auth/local`, {
-          identifier: this.email,
-          password: this.password,
-        });
-        this.user = data;
-        this.loading = false;
+        if (this.readyToSubmit) {
+          this.loading = true;
+          const res = await fetch("http://localhost:3000/api/users/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: this.email,
+              password: this.password,
+            }),
+          });
 
-        this.$store.commit("setUser", data);
-        //   this.setUser(data.user)
-        this.$router.push("/");
+          const json = await res.json();
+          this.user = json;
+          this.$store.commit("setUser", json);
+          this.loading = false;
+          this.readyToSubmit = false;
+          if (this.user.errors !== undefined) {
+            this.error = this.user.errors[0].message;
+          }
+
+          this.user.user.role === "user"
+            ? this.$router.push("profile")
+            : this.$router.push("/");
+        }
       } catch (err) {
         this.loading = false;
+        this.readyToSubmit = false;
+        console.log(apiUrl);
         alert(err.message || "An error occurred.");
       }
     },
-    forgotPassword() {
-      axios
-        .post("http://localhost:1337/auth/forgot-password", {
-          email: this.email, // user's email
-        })
-        .then((response) => {
-          console.log("Your user received an email");
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log("An error occurred:", error.response);
-        });
-      /*try {
-        const {data} = await axios.post(`${apiUrl}/auth/forgot-password`, {
-          email: this.email, 
-        })
-        console.log(data)
-      } catch (err) {
-        console.log('An error occurred:', err.response);
-      }*/
+    validateEmail(email) {
+      let regex = /\S+@\S+\.\S+/;
+      let regRight = regex.test(email);
+      if (!regRight) {
+        return (this.error = "check your email format");
+      }
+      return (this.readyToSubmit = true);
+    },
+    validatePassword(password) {
+      let num = /[0-9]+/gi;
+      let alphabets = /[a-z]+/gi;
+      let regRight = num.test(password) && alphabets.test(password);
+      let passwordCharacters = password.length >= 6;
+      if (!regRight || !passwordCharacters) {
+        this.error =
+          "password must have a letter with with at least 6 characters";
+      }
     },
   },
 };
@@ -276,12 +248,12 @@ button:focus {
   text-align: center;
   margin-top: 10px;
   color: rgb(129 129 129);
-  font-size: 16px;
+  font-size: 12px;
 }
-.spacing > P {
+.spacing > p {
   margin-bottom: 5px;
   margin-top: 5px;
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .input-line:focus {
@@ -320,8 +292,8 @@ button:focus {
 .input-line {
   background: none;
   margin-bottom: 10px;
-  line-height: 2.4em;
-  color: #fff;
+  line-height: 2em;
+  color: #484444;
   font-family: roboto;
   font-weight: 300;
   letter-spacing: 0px;
@@ -355,6 +327,8 @@ button:focus {
   -ms-flex-pack: center;
   justify-content: center;
   background: #cbd5e0;
+  background-color: rgb(203 213 224);
+  background-image: url("../assets/diamond-sunset.svg");
   height: 850px;
   z-index: 100;
 }
@@ -374,8 +348,8 @@ button:focus {
 }
 .adduser-link {
   text-decoration: none;
-  font-size: 27px;
-  color:#378fce;
+  font-size: 23px;
+  color: #378fce;
 }
 
 .welcome {
@@ -390,9 +364,11 @@ button:focus {
 
 .subtitle {
   text-align: center;
-  line-height: 1em;
+  line-height: 2em;
   font-weight: 100;
   letter-spacing: 0px;
+  color: red;
+  font-family: monospace;
   letter-spacing: 0.02rem;
 }
 
@@ -409,17 +385,19 @@ button:focus {
   flex-flow: column;
   box-shadow: 0px 15px 50px 10px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
-  height: 500px;
-  width: 360px;
+  height: 445px;
+  width: 340px;
   background: #fff;
+  border-radius: 6px;
 }
 
 .overlay {
   filter: alpha(opacity=85);
-  height: 500px;
+  height: 420px;
   position: absolute;
-  width: 360px;
+  width: 340px;
   background: #ffffff;
+  border-radius: 6px;
 }
 *,
 *:before,
@@ -621,6 +599,93 @@ h6 {
   text-align: center;
   padding: 5px;
 }
+
+.ctn {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #33849c;
+  border: none;
+  font-family: "Raleway", serif;
+  font-size: 30px;
+  color: #fffeee;
+  margin-top: 10px;
+  height: 40px;
+  width: 260px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.btn-text {
+  font-family: "Raleway", serif;
+  font-size: 20px;
+  color: #fffeee;
+}
+.load {
+  /*  display: none;*/
+  width: 20px;
+  height: 20px;
+  border: 5px solid #fff;
+  border-radius: 100%;
+}
+.open {
+  border-top: 5px solid transparent;
+  animation: load-animate infinite linear 1s;
+}
+
+@-moz-keyframes load-animate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+    opacity: 0.35;
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes load-animate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+    opacity: 0.35;
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes load-animate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+    opacity: 0.35;
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes load-animate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+    opacity: 0.35;
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 @-webkit-keyframes square {
   0% {
     transform: translateY(0);

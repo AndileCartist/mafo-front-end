@@ -7,7 +7,7 @@
 <script>
 import axios from "axios";
 import Table from "../components/Table.vue";
-const apiUrl = process.env.API_URL || "https://mafo-backend.herokuapp.com/";
+const apiUrl = process.env.API_URL || "http://localhost:3000";
 
 export default {
   name: "all-students",
@@ -23,13 +23,13 @@ export default {
     this.getData();
   },
   methods: {
-    async getData() {
+       async getData() {
       try {
-        let { data } = await axios.get(
-          `${apiUrl}student-data?_sort=publishedAt:DESC&_start=20&_limit=${13}`
+        let {data} = await axios.get(
+          `${apiUrl}/api/users`
         );
-        this.students = data;
-        // console.log(data);
+        this.students = data.docs
+        console.log(); 
       } catch (err) {
         alert(err.message || "An error occurred.");
         console.log(err);

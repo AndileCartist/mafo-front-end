@@ -1,39 +1,65 @@
 <template>
   <div class="content">
     <h1>Next Payments</h1>
-    <Table :students="students" />
+    <payment-table :payments="sortedPayments"></payment-table>
   </div>
 </template>
 <script>
 import axios from "axios";
-import Table from "../components/Table.vue";
-const apiUrl = process.env.API_URL || "https://mafo-backend.herokuapp.com/";
+import PaymentTable from "../components/PaymentTable.vue";
+const apiUrl = process.env.API_URL || "http://localhost:3000";
+import { mapGetters } from "vuex";
+import qs from "qs";
 
 export default {
   name: "next-payments",
   components: {
-    Table,
+    PaymentTable,
   },
   data() {
     return {
-      students: [],
+      payments: [],
     };
   },
+  computed: {
+    ...mapGetters(["getToken", "getRole", "getId"]),
+    sortedPayments() {
+      let copy = [...this.payments];
+      let payments = copy.map((pay) => {
+        return { ...pay, time: new Date(pay.date) };
+      });
+      console.log(payments);
+      return payments.sort((a, b) => a.time - b.time);
+    },
+  },
+
   created() {
     this.getData();
   },
   methods: {
     async getData() {
+      const query = {
+        user: {
+          equals: this.getId,
+        },
+      };
+      const stringifiedQuery = qs.stringify(
+        { where: query },
+        { addQueryPrefix: true }
+      );
       try {
-        let { data } = await axios.get(
-          `${apiUrl}student-data?_sort=publishedAt:DESC&_start=30&_limit=${18}`
-        );
-        this.students = data;
-        // console.log(data);
+        const userUrl = `${apiUrl}/api/payments${stringifiedQuery}`;
+        const adminUrl = `${apiUrl}/api/payments`;
+        let url = this.getRole === "admin" ? adminUrl : userUrl;
+        let { data } = await axios.get(url, {
+          headers: {
+            Authorization: `JWT ${this.getToken}`,
+          },
+        });
+        this.payments = data.docs;
+        console.log();
       } catch (err) {
         alert(err.message || "An error occurred.");
-        console.log(err);
-        console.log(this.$route.name);
       }
     },
   },

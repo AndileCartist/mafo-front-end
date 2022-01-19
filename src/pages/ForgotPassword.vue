@@ -5,30 +5,24 @@
         <div class="container">
           <div class="window">
             <div class="overlay"></div>
+
+
+
             <div class="content">
-              <category-header header="Reset Password!"></category-header>
+              <category-header header="Enter Email"></category-header>
               <div style="height: 25px;" class="subtitle">{{ error }}</div>
               <div class="input-fields">
                 <input
-                  type="password"
-                  placeholder="Password"
+                  type="email"
+                  placeholder="Email"
                   class="input-line full-width"
-                  v-model="password"
-                />
-                <input
-                  type="password"
-                  placeholder=" confirm Password"
-                  class="input-line full-width"
-                  v-model="confirmPassword"
+                  v-model="email"
                 />
               </div>
 
               <div class="btn-field">
                 <div class="ctn">
-                  <button
-                    class="btn-label"
-                    @click="validatePassword(password), handleSubmit()"
-                  >
+                  <button class="btn-label" @click="validateEmail(email),handleSubmit()">
                     <span :class="{ open: loading, load: loading }"
                       ><span
                         :style="
@@ -51,6 +45,9 @@
                 >
               </div>
             </div>
+
+
+
           </div>
         </div>
         <ul class="bg-bubbles">
@@ -64,7 +61,7 @@
           <li></li>
           <li></li>
           <li></li>
-        </ul>
+        </ul>  
         <div
           :style="modalOpen ? { display: 'block' } : { display: 'none' }"
           class="modal"
@@ -84,98 +81,89 @@
       </div>
     </div>
   </section>
+  <!-- <section>
+    <div class="small-container cont">
+      <form autocomplete="off" @submit.stop.prevent="handleSubmit">
+        <h1>Material Design Text Input With No Extra Markup</h1>
+        <input
+          id="email"
+          v-model="email"
+          type="email"
+          autofocus="true"
+          placeholder="Enter your email"
+          required
+        />
 
-  <!--  <div class="background">
-    <div class="container">
-      <div class="window">
-        <div class="overlay"></div>
-        <div class="content">
-          <div class="welcome">RESET-PASSWORD</div>
-          <div class="subtitle">
-            Enter new password to reset your forgoten one
-          </div>
-
-          <div class="input-fields">
-            <input
-              type="password"
-              placeholder="Password"
-              class="input-line full-width"
-              v-model="password"
-            />
-            <input
-              type="password"
-              placeholder=" confirm Password"
-              class="input-line full-width"
-              v-model="confirmPassword"
-            />
-          </div>
-
-          <div>
-            <button @click="handleSubmit()" class="ghost-round full-width">
-              Submit Password
-            </button>
-          </div>
-        </div>
-      </div>
+        <button
+          :disabled="loading"
+          type="submit"
+          class="btn btn-primary btn-block mt-3"
+          @click="handleSubmit()"
+        >
+          Submit
+        </button>
+      </form>
     </div>
-  </div> -->
+  </section> -->
 </template>
 
 <script>
+//import Strapi from 'strapi-sdk-javascript/build/main'
 import axios from "axios";
 import CategoryHeader from '../components/CategoryHeader.vue';
-//const apiUrl = process.env.API_URL || "https://mzansi-curator.herokuapp.com/";
+//const apiUrl = process.env.API_URL || "http://localhost:1337";
+//const strapi = new Strapi(apiUrl)
+//import { mapMutations } from 'vuex'
 
 export default {
   components: { CategoryHeader },
-  name: "reset-password",
+  name: "forgot-password",
   data() {
     return {
-      password: "",
-      confirmPassword: "",
-      res: "",
+      email: "",
+      loading: false,
+      response: "",
       readyToSubmit: false,
       error: "",
+      modalOpen: false
     };
   },
+
   methods: {
     async handleSubmit() {
       if (this.readyToSubmit) {
-        try {
-          let res = await axios.post(
-            `http://localhost:3000/api/users/reset-password`,
-            {
-              token: this.$route.query.token,
-              password: this.password,
-            }
-          );
-          this.res = res;
-          this.readyToSubmit = false;
-          this.$router.push("/signin");
-        } catch (err) {
-          this.readyToSubmit = false;
-          this.error = err;
-          console.log(err.message);
-        }
+        this.loading = true;
+        axios
+          .post(`http://localhost:3000/api/users/forgot-password`, {
+            email: this.email,
+          })
+          .then((response) => {
+            this.response = response.data;
+            this.loading = false;
+            this.error = "";
+            this.modalOpen = true
+          })
+          .catch((error) => {
+            this.loading = false;
+            this.error = error.response
+            console.log("An error occurred:", error.response);
+          });
       }
     },
-    validatePassword(password) {
-      let num = /[0-9]+/gi;
-      let alphabets = /[a-z]+/gi;
-      let regRight = num.test(password) && alphabets.test(password);
-      let passwordCharacters = password.length >= 6;
-      if (!regRight || !passwordCharacters) {
-        return (this.error =
-          "password must have a letter with with at least 6 characters");
-      } else if (this.password !== this.confirmPassword) {
-        return (this.error = "passwords don't match");
+    validateEmail(email) {
+      let regex = /\S+@\S+\.\S+/;
+      let regRight = regex.test(email);
+      if (!regRight) {
+        return (this.error = "check your email format");
       }
       return (this.readyToSubmit = true);
+    },
+    closeModal() {
+      this.modalOpen = false;
     },
   },
 };
 </script>
-
 <style lang="css" scoped>
 input {
   border: none;

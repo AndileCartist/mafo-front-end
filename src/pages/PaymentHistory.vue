@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <h1>Payment History</h1>
+    <h1>Payment Analytics</h1>
     <div class="chart-con">
       <payment-chart></payment-chart>
      
@@ -25,7 +25,7 @@ export default {
     };
   },
   created() {
-    this.getData();
+    //this.getData();
   },
   methods: {
     async getData() {

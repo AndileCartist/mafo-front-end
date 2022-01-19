@@ -1,42 +1,58 @@
+const state = {
+  user: null,
+};
 
- const state = {
-    user: null,
- }
-
- const mutations = {
+const mutations = {
   setUser(state, user) {
-    state.user = user
-    let use = JSON.stringify(user)
-    localStorage.setItem("user", use)
+    state.user = user;
+    let use = JSON.stringify(user);
+    localStorage.setItem("user", use);
   },
 
   logout(state) {
-    state.user = null
-    localStorage.removeItem('user');
-  }
-}
+    state.user = null;
+    localStorage.removeItem("user");
+  },
+};
 
- const getters = {
+const getters = {
   userName(state) {
-   return state.user.user.username
-  }, 
+    return {name: state.user.user.name, surname: state.user.user.surname}
+  },
   getToken(state) {
-    return state.user.jwt
+    return state.user.token;
   },
-  userLogged (state) {
-    return state.user.user.confirmed
+  userLogged(state) {
+    if (state.user !== null) {
+      return state.user.message === "Auth Passed" ? true : false;
+    }
+    return false;
   },
-  userData () {
-    return state.user
+  userData() {
+    return state.user;
   },
-  userEmail () {
-    return state.user.user.email
+  userEmail() {
+    return state.user.user.email;
   },
-
-}
+  getRole(state) {
+    if (state.user !== null) {
+      return state.user.user.role;
+    }
+    return false;
+  },
+  getId(state) {
+    return state.user.user.id;
+  },
+  getContact(state) {
+    return state.user.user.contact;
+  },
+  getDate(state) {
+    return state.user.user.createdAt;
+  }
+};
 
 export default {
   state,
   mutations,
-  getters
-}
+  getters,
+};

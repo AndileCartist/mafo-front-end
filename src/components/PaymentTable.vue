@@ -3,23 +3,15 @@
     <div class="table">
       <div class="table-head">
         <p>NAME</p>
-        <p>SURNAME</p>
-        <p>CONTACT</p>
-        <p>EMAIL</p>
+        <p>Email</p>
+        <p>Date</p>
+        <p>Amount</p>
       </div>
-      <div v-for="student in students" :key="student.id" class="student-info">
-        <p>{{ student.name }}</p>
-        <p>{{ student.surname }}</p>
-        <p>{{ formatNumber(student.contact) }}</p>
-        <p>{{ student.email }}</p>
-        <!--    <div class="button-container">
-          <button class="button-50 view-btn" role="button">
-            view Profle
-          </button>
-        </div>
-        <div class="button-container">
-          <button class="button-50 edit-btn" role="button">Edit</button>
-        </div>  -->
+      <div v-for="payment in payments" :key="payment.id" class="payment-info">
+        <p>{{ payment.username }}</p>
+        <p>{{ payment.user.email }}</p>
+        <p>{{ formatDate(payment.date) }}</p>
+        <p>R {{ payment.payout }}</p>
       </div>
     </div>
   </div>
@@ -29,7 +21,7 @@
 export default {
   name: "table",
   props: {
-    students: Array,
+    payments: Array,
   },
   methods: {
     formatNumber(number) {
@@ -38,6 +30,10 @@ export default {
       let lastNumber = num.slice(num.length - 1);
       let formated = last.replace(/([0-9]{3})/g, "$1" + "-");
       return `${formated.slice(0, formated.length - 1)}${lastNumber}`;
+    },
+    formatDate(date) {
+      let string = new Date(date);
+      return string.toDateString();
     },
   },
 };
@@ -70,12 +66,12 @@ export default {
   -moz-box-shadow: -3px 9px 9px -8px rgba(0, 0, 0, 0.1);
 }
 .table-head > p,
-.student-info > p {
+.payment-info > p {
   padding-left: 15px;
   color: #5e5e5e;
 }
 
-.student-info {
+.payment-info {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: 1fr 0.8fr;
@@ -84,7 +80,7 @@ export default {
   align-items: flex-end;
   margin-bottom: 15px;
 }
-.student-info > p {
+.payment-info > p {
   grid-column-start: span 2;
   padding-left: 15px;
   color: #5e5e5e;
@@ -166,11 +162,11 @@ export default {
   .table-head {
     grid-template-columns: repeat(4, 2fr);
   }
-  .student-info {
+  .payment-info {
     grid-template-columns: repeat(4, 2fr);
     height: 60px;
   }
-  .student-info > p {
+  .payment-info > p {
     grid-column-start: span 1;
   }
   .button-container {

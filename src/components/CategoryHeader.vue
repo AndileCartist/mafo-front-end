@@ -20,7 +20,6 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-bottom: 30px;
 }
 .category-font {
   font-family: "Playfair Display", serif;

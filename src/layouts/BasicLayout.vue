@@ -8,12 +8,12 @@
       <div class="side-nav" :class="{ hide: nav }">
         <img src="../assets/logo.jpg" alt="" />
         <div class="side-nav-list">
-          <div class="nav-list-item">
+          <div class="nav-list-item"  :style="isAdmin ? { display: 'block' } : { display: 'none' }">
             <div class="active-marker"></div>
             <img src="../assets/dashboard-5481.svg" alt="" />
             <router-link to="/">DashBoard</router-link>
           </div>
-          <div class="nav-list-item">
+          <div class="nav-list-item" :style="isAdmin ? { display: 'block' } : { display: 'none' }">
             <img src="../assets/users-267.svg" alt="" />
             <router-link to="all-students">All Users</router-link>
           </div>
@@ -21,11 +21,15 @@
             <img src="../assets/credit-card-2015.svg" alt="" />
             <router-link to="payment-history">Payment History</router-link>
           </div>
-          <div class="nav-list-item">
+          <div class="nav-list-item" :style="isAdmin ? { display: 'block' } : { display: 'none' }">
             <img src="../assets/add-user.svg" alt="" />
             <router-link to="/adduser">Add User</router-link>
           </div>
-          <div class="">
+          <div class="nav-list-item" :style="!isAdmin ? { display: 'block' } : { display: 'none' }">
+            <img src="../assets/add-user.svg" alt="" />
+            <router-link to="/profile">Profile</router-link>
+          </div>
+          <div @click="logout(), serverLogout()" class="">
             <link-btn></link-btn>
           </div>
         </div>
@@ -40,7 +44,7 @@
               placeholder=" search name or number"
             />
           </form>
-          <img src="../assets/profile-svgrepo-com.svg" alt="" />
+          <img src="../assets/profile-svgrepo-com.svg" alt="user profile" />
         </div>
         <router-view></router-view>
       </div>
@@ -53,6 +57,7 @@ import MobileNavigation from "../components/MobileNavigation.vue";
 //import ComputerNavigation from "../components/ComputerNavigation.vue";
 import { mapGetters, mapMutations } from "vuex";
 import LinkBtn from "../components/LinkBtn.vue";
+//import axios from "axios";
 
 //const apiUrl = process.env.API_URL || "http://localhost:1337";
 export default {
@@ -70,35 +75,51 @@ export default {
   },
   created() {
     this.KeepUserLogged();
+    
   },
-   watch: {
+  watch: {
     $route: "routeUpdate",
   },
   methods: {
-    ...mapMutations(["setUser"]),
+    ...mapMutations(["setUser", "logout"]),
     KeepUserLogged() {
       let stored = localStorage.getItem("user");
 
       if (stored !== null && this.userData === null) {
         let user = JSON.parse(localStorage.getItem("user"));
         this.$store.commit("setUser", user);
-        console.log(localStorage.getItem("user"));
+        //  console.log(localStorage.getItem("user"));
       }
     },
     hideNavigation() {
-      return this.currentRoute === "signin"
+      return this.currentRoute === "signin" ||
+        this.currentRoute === "forgot-password" ||
+        this.currentRoute === "reset-password" ||
+        this.currentRoute === "redirect" ||
+        this.currentRoute === "adduser"
         ? (this.hide = true)
         : (this.hide = false);
     },
     routeUpdate() {
       this.currentRoute = this.$route.name;
     },
+    serverLogout() {
+      this.$router.push("signin");
+    },
   },
   computed: {
-    ...mapGetters(["userData"]),
+    ...mapGetters(["userData", "getRole"]),
     nav() {
-      return this.hideNavigation()
-    }
+      return this.hideNavigation();
+    },
+    isAdmin() {
+       let user = this.getRole;
+     // console.log(this.userData);
+     // console.log(this.userData.role)
+     return (user === "admin")
+        ?  true
+        : false;
+    },
   },
 };
 </script>
