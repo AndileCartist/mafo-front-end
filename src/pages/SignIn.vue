@@ -159,16 +159,16 @@ export default {
 
           const json = await res.json();
           this.user = json;
-          this.$store.commit("setUser", json);
+
           this.loading = false;
           this.readyToSubmit = false;
           this.passwordCorrect = false;
           if (this.user.errors !== undefined) {
             this.error = this.user.errors[0].message;
-            this.$router.push("signin");
           }
 
-          if (this.user.errors !== undefined) {
+          if (this.user.errors === undefined) {
+            this.$store.commit("setUser", json);
             this.user.user.role === "user"
               ? this.$router.push("profile")
               : this.$router.push("/");

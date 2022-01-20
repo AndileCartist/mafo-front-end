@@ -18,12 +18,12 @@ const mutations = {
 const getters = {
   userName(state) {
     if (state.user !== null) {
-    return {name: state.user.user.name, surname: state.user.user.surname}
+      return { name: state.user.user.name, surname: state.user.user.surname };
     }
   },
   getToken(state) {
     if (state.user !== null) {
-    return state.user.token;
+      return state.user.token;
     }
   },
   userLogged(state) {
@@ -34,35 +34,35 @@ const getters = {
   },
   userData(state) {
     if (state.user !== null) {
-    return state.user;
+      return state.user;
     }
   },
   userEmail(state) {
     if (state.user !== null) {
-    return state.user.user.email;
+      return state.user.user.email;
     }
   },
   getRole(state) {
     if (state.user !== null) {
       return state.user.user.role;
     }
-    return 'user';
+    return false;
   },
   getId(state) {
     if (state.user !== null) {
-    return state.user.user.id;
+      return state.user.user.id;
     }
   },
   getContact(state) {
     if (state.user !== null) {
-    return state.user.user.contact;
+      return state.user.user.contact;
     }
   },
   getDate(state) {
     if (state.user !== null) {
-    return state.user.user.createdAt;
+      return state.user.user.createdAt;
     }
-  }
+  },
 };
 
 export default {
