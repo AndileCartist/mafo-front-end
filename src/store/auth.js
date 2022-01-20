@@ -34,12 +34,12 @@ const getters = {
   userEmail(state) {
     return state.user.user.email;
   },
-  getRole(state) {
+ /* getRole(state) {
     if (state.user !== null) {
       return state.user.user.role;
     }
     return false;
-  },
+  },*/
   getId(state) {
     return state.user.user.id;
   },
