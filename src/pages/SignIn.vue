@@ -98,13 +98,13 @@
 </template>
 
 <script>
-import CategoryHeader from '../components/CategoryHeader.vue';
+import CategoryHeader from "../components/CategoryHeader.vue";
 //import axios from "axios";
 const apiUrl = process.env.API_URL || "https://mafo-academy.herokuapp.com";
 //import { mapMutations } from 'vuex'
 export default {
   name: "sign-in",
-  components: {CategoryHeader},
+  components: { CategoryHeader },
   data() {
     return {
       username: "",
@@ -162,19 +162,20 @@ export default {
           this.$store.commit("setUser", json);
           this.loading = false;
           this.readyToSubmit = false;
-          this.passwordCorrect = false
+          this.passwordCorrect = false;
           if (this.user.errors !== undefined) {
             this.error = this.user.errors[0].message;
           }
 
-          this.user.user.role === "user"
-            ? this.$router.push("profile")
-            : this.$router.push("/");
+          if (this.user.errors !== undefined) {
+            this.user.user.role === "user"
+              ? this.$router.push("profile")
+              : this.$router.push("/");
+          }
         }
       } catch (err) {
         this.loading = false;
         this.readyToSubmit = false;
-       
       }
     },
     validateEmail(email) {
@@ -194,7 +195,7 @@ export default {
         this.error =
           "password must have a letter with with at least 6 characters";
       }
-      return this.passwordCorrect =  true
+      return (this.passwordCorrect = true);
     },
   },
 };
