@@ -28,10 +28,10 @@ const getters = {
     }
     return false;
   },
-  userData() {
+  userData(state) {
     return state.user;
   },
-  userEmail() {
+  userEmail(state) {
     return state.user.user.email;
   },
   getRole(state) {
