@@ -174,8 +174,7 @@ export default {
       } catch (err) {
         this.loading = false;
         this.readyToSubmit = false;
-        console.log(apiUrl);
-        alert(err.message || "An error occurred.");
+       
       }
     },
     validateEmail(email) {
