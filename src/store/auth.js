@@ -17,10 +17,14 @@ const mutations = {
 
 const getters = {
   userName(state) {
+    if (state.user !== null) {
     return {name: state.user.user.name, surname: state.user.user.surname}
+    }
   },
   getToken(state) {
+    if (state.user !== null) {
     return state.user.token;
+    }
   },
   userLogged(state) {
     if (state.user !== null) {
@@ -29,25 +33,35 @@ const getters = {
     return false;
   },
   userData(state) {
+    if (state.user !== null) {
     return state.user;
+    }
   },
   userEmail(state) {
+    if (state.user !== null) {
     return state.user.user.email;
+    }
   },
- /* getRole(state) {
+  getRole(state) {
     if (state.user !== null) {
       return state.user.user.role;
     }
-    return false;
-  },*/
+    return 'admin';
+  },
   getId(state) {
+    if (state.user !== null) {
     return state.user.user.id;
+    }
   },
   getContact(state) {
+    if (state.user !== null) {
     return state.user.user.contact;
+    }
   },
   getDate(state) {
+    if (state.user !== null) {
     return state.user.user.createdAt;
+    }
   }
 };
 
