@@ -87,7 +87,7 @@ router.beforeEach((to, from, next) => {
     isAuthinticated = user.message === "Auth Passed" ? true : false;
   }
   //if (to.name !== "signin" && !isAuthinticated) next({ name: "signin" });
-  if ((to.name === "payment-history" || to.name === "profile") && !isAuthinticated) {
+  if ((to.name === "home" || to.name === "payment-history" || to.name === "profile") && !isAuthinticated) {
     return next({ name: "signin" })
   }
   else if ((to.name === "home" || to.name === "next-payments" || to.name === "all-students") && isAuthinticated && user.user.role !== 'admin') {
