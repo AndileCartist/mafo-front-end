@@ -46,7 +46,7 @@ const getters = {
     if (state.user !== null) {
       return state.user.user.role;
     }
-    return 'admin';
+    return 'user';
   },
   getId(state) {
     if (state.user !== null) {
