@@ -141,6 +141,7 @@ export default {
     },
     closeModal() {
       this.modalOpen = false;
+      this.$router.push("signin");
     },
     async handleSignin() {
       try {
