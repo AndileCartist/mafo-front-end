@@ -165,6 +165,7 @@ export default {
           this.passwordCorrect = false;
           if (this.user.errors !== undefined) {
             this.error = this.user.errors[0].message;
+            his.$router.push("signin");
           }
 
           if (this.user.errors !== undefined) {
