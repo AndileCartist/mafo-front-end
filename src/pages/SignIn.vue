@@ -116,6 +116,7 @@ export default {
       currentRoute: this.$route.name,
       modalOpen: false,
       error: "",
+      passwordCorrect: false,
       readyToSubmit: false,
     };
   },
@@ -143,7 +144,7 @@ export default {
     },
     async handleSignin() {
       try {
-        if (this.readyToSubmit) {
+        if (this.readyToSubmit && this.passwordCorrect) {
           this.loading = true;
           const res = await fetch(`${apiUrl}/api/users/login`, {
             method: "POST",
@@ -161,6 +162,7 @@ export default {
           this.$store.commit("setUser", json);
           this.loading = false;
           this.readyToSubmit = false;
+          this.passwordCorrect = false
           if (this.user.errors !== undefined) {
             this.error = this.user.errors[0].message;
           }
@@ -193,6 +195,7 @@ export default {
         this.error =
           "password must have a letter with with at least 6 characters";
       }
+      return this.passwordCorrect =  true
     },
   },
 };
