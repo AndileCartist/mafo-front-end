@@ -80,7 +80,7 @@
 </template>
 <script>
 import axios from "axios";
-const apiUrl = process.env.API_URL || "http://localhost:3000";
+const apiUrl = process.env.API_URL || "https://mafo-academy.herokuapp.com";
 import { mapGetters } from "vuex";
 import qs from "qs";
 

@@ -9,6 +9,7 @@
 
 <script>
 //const apiUrl = "https://originazar-back-end.herokuapp.com";
+const apiUrl = process.env.API_URL || "https://mafo-academy.herokuapp.com";
 import axios from "axios";
 
 export default {
@@ -37,7 +38,7 @@ export default {
     //  let provider = this.$route.path.split("/")[2];
       axios
         .post(
-          `http://localhost:3000/api/users/verify/${this.$route.query.token}`,
+          `${apiUrl}/api/users/verify/${this.$route.query.token}`,
           {}
         )
         .then((response) => {

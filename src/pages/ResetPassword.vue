@@ -125,6 +125,7 @@
 import axios from "axios";
 import CategoryHeader from '../components/CategoryHeader.vue';
 //const apiUrl = process.env.API_URL || "https://mzansi-curator.herokuapp.com/";
+const apiUrl = process.env.API_URL || "https://mafo-academy.herokuapp.com";
 
 export default {
   components: { CategoryHeader },
@@ -143,7 +144,7 @@ export default {
       if (this.readyToSubmit) {
         try {
           let res = await axios.post(
-            `http://localhost:3000/api/users/reset-password`,
+            `${apiUrl}/api/users/reset-password`,
             {
               token: this.$route.query.token,
               password: this.password,

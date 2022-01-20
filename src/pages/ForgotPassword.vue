@@ -111,8 +111,7 @@
 //import Strapi from 'strapi-sdk-javascript/build/main'
 import axios from "axios";
 import CategoryHeader from '../components/CategoryHeader.vue';
-//const apiUrl = process.env.API_URL || "http://localhost:1337";
-//const strapi = new Strapi(apiUrl)
+const apiUrl = process.env.API_URL || "https://mafo-academy.herokuapp.com";
 //import { mapMutations } from 'vuex'
 
 export default {
@@ -134,7 +133,7 @@ export default {
       if (this.readyToSubmit) {
         this.loading = true;
         axios
-          .post(`http://localhost:3000/api/users/forgot-password`, {
+          .post(`${apiUrl}/users/forgot-password`, {
             email: this.email,
           })
           .then((response) => {

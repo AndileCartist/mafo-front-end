@@ -134,6 +134,7 @@
 <script>
 import CategoryHeader from "../components/CategoryHeader.vue";
 import axios from "axios";
+const apiUrl = process.env.API_URL || "https://mafo-academy.herokuapp.com";
 export default {
   name: "add-user-page",
   components: {
@@ -165,7 +166,7 @@ export default {
           this.loading = true;
           this.error = "loading...";
           //     const response = await strapi.login(this.email, this.password)
-          let user = await axios.post("http://localhost:3000/api/users/", {
+          let user = await axios.post(`${apiUrl}/api/users/`, {
             name: this.name,
             email: this.email,
             password: this.password,

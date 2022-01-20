@@ -7,7 +7,7 @@
 <script>
 import axios from "axios";
 import Table from "../components/Table.vue";
-const apiUrl = process.env.API_URL || "http://localhost:3000";
+const apiUrl = process.env.API_URL || "https://mafo-academy.herokuapp.com";
 
 export default {
   name: "all-students",

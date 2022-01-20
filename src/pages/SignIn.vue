@@ -100,7 +100,7 @@
 <script>
 import CategoryHeader from '../components/CategoryHeader.vue';
 //import axios from "axios";
-const apiUrl = /*process.env.API_URL || */ "http://localhost:3000";
+const apiUrl = process.env.API_URL || "https://mafo-academy.herokuapp.com";
 //import { mapMutations } from 'vuex'
 export default {
   name: "sign-in",
@@ -145,7 +145,7 @@ export default {
       try {
         if (this.readyToSubmit) {
           this.loading = true;
-          const res = await fetch("http://localhost:3000/api/users/login", {
+          const res = await fetch(`${apiUrl}/api/users/login`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
